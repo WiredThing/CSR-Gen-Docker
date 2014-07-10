@@ -1,0 +1,10 @@
+#!/bin/bash
+
+printf "Enter the domain for this key: "
+
+read DOMAIN
+
+ssh-keygen -t rsa -b 2048 -f $DOMAIN.pem -P "" -C "$DOMAIN" -q
+
+echo "Generated Private Key - $DOMAIN.pem"
+echo "Generated Public Key - $DOMAIN.pem.pub"

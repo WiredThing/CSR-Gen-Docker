@@ -1,0 +1,35 @@
+#!/bin/bash
+
+printf "Private Key file to Generate the CSR: "
+
+read FILENAME
+
+printf "CSR Country: "
+read COUNTRY
+
+printf "CSR Organisation: "
+read ORGANISATION
+
+printf "CSR Organisational Unit: "
+read OU
+
+printf "CSR State: "
+read STATE
+
+printf "CSR City: "
+read CITY
+
+
+KEY=$(echo `cat $FILENAME | sed -e 's/$/\\\n/'` | sed -e 's/\\n /\\\n/g')
+
+echo "CREATING CSR"
+
+docker build --quiet=true -t wiredthing/csrcreate . > /dev/null
+
+echo ""
+echo ""
+
+docker run --rm --env PRIVATE_KEY="$KEY" --env CSR_ORGANISATION="$ORGANISATION" --env CSR_COUNTRY="$COUNTRY" --env CSR_ORGANISATIONAL_UNIT="$OU" --env CSR_STATE="$STATE" --env CSR_CITY="$CITY" wiredthing/csrcreate
+
+docker rmi wiredthing/csrcreate > /dev/null
+
